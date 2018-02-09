@@ -12,7 +12,11 @@ module.exports = (customerDB, certificateDB) => {
                         key: keys.serviceKey,
                         cert: keys.certificate
                     }
-                    certificateDB.add(body).then(newDoc => resolve(newDoc));
+                    certificateDB.add(body)
+                        .then(newDoc => {
+                            customerDB.update({ _id: customerId }, { $inc: {certificates: 1} } )
+                            resolve(newDoc);
+                        });
                 })
             })
         }

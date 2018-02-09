@@ -7,8 +7,8 @@ const config = require('./config');
 
 const app = express();
 const customDatastore = require("./customDatastore");
-const customerDB =  new customDatastore('customer.db');
-const certificateDB = new customDatastore('certificate.db');
+const customerDB =  new customDatastore(__dirname + '/customer.db');
+const certificateDB = new customDatastore(__dirname + '/certificate.db');
 
 const customers = require("./customers")(customerDB, certificateDB);
 const certificates = require("./certificates")(customerDB, certificateDB);
@@ -33,15 +33,21 @@ app.post('/customers', bodyParser.json(), (req, res) => {
 })
 
 app.delete('/customers/:id', (req, res) => {
-
+    customers.delete(req.params.id)
+        .then(data => res.send({removed: data}))
+        .catch(error => outputError(error, res))
 })
 
 app.get('/customers/:customerId', (req, res) => {
-
+    certificates.getAll(req.params.customerId)
+        .then(data => res.send(data))
+        .catch(error => outputError(error, res))
 })
 
 app.post('/certificates', bodyParser.json(), (req, res) => {
-
+    certificates.add(req.body.customerId)
+        .then(data => res.send(data))
+        .catch(error => outputError(error, res))
 })
 
 app.post('/certificates/:id', bodyParser.json(), (req, res) => {

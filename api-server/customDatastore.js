@@ -15,7 +15,7 @@ class dbWithPromise {
         })
     }
 
-    upadte(query, update, options = {}) {
+    update(query, update, options = {}) {
         return new Promise((resolve, reject) => {
             this.db.update(query, update, options, (err, numReplaced) => {
                 if (err) reject(err);

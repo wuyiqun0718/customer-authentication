@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const _ = require('lodash');
 const INTERATIONS = 10000;
 const KEY_LEN = 64;
 const ALGORITHIM = 'sha512';
@@ -25,7 +26,8 @@ const getHash = (password, salt) => {
 module.exports = (customerDB, certificateDB) => {
     class customers {
         static getAll() {
-            return customerDB.search();
+            return customerDB.search()
+                .then(customers => customers.map(customer => _.omit(customer, ['hash', 'salt'])));
         }
 
         static add({ name, email, password }) {
@@ -37,23 +39,15 @@ module.exports = (customerDB, certificateDB) => {
                         email,
                         hash,
                         salt,
-                        certificates: []
+                        certificates: 0
                     }
                     return customerDB.add(newCustomer);
                 })
+                .then((newCustomer) => _.omit(newCustomer, ['hash', 'salt']))
         }
 
-        static delete({ email, password }) {
-            let hashInStore = null;
-            return customerDB.search({ email })
-                .then(customer => {
-                    hashInStore = customer.hash;
-                    return getHash(password, customer.salt)
-                })
-                .then( ({ hash }) => {
-                    if (hash === hashInStore) return customerDB.delete({ email });
-                    else return "Wrong Password";
-                })
+        static delete(_id) {
+            return customerDB.delete({ _id });
         }
     }
 
