@@ -1,0 +1,14 @@
+.App {
+    width: 50%;
+    margin: 30px auto;
+}
+
+.addCustomerButton {
+    position: fixed;
+    bottom: 20%;
+    right: 20%;
+}
+
+.inputField {
+    margin-left: 20px;
+}

@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const INTERATIONS = 10000;
 const KEY_LEN = 64;
-const ALGORITHM = 'sha512';
+const ALGORITHIM = 'sha512';
 
 const getSalt = () => {
     return new Promise((resolve, reject) => {
@@ -15,7 +15,7 @@ const getSalt = () => {
 
 const getHash = (password, salt) => {
     return new Promise( (resolve, reject) => {
-        crypto.pbkdf2(password, salt, INTERATIONS, KEY_LEN, (err, hash) => {
+        crypto.pbkdf2(password, salt, INTERATIONS, KEY_LEN, ALGORITHIM, (err, hash) => {
             if (err) reject(err);
             resolve({ hash, salt });
         })
@@ -24,6 +24,10 @@ const getHash = (password, salt) => {
 
 module.exports = (customerDB, certificateDB) => {
     class customers {
+        static getAll() {
+            return customerDB.search();
+        }
+
         static add({ name, email, password }) {
             return getSalt()
                 .then(salt => getHash(password, salt))

@@ -33,9 +33,9 @@ class dbWithPromise {
         })
     }
 
-    search(query) {
+    search(query = {}) {
         return new Promise((resolve, reject) => {
-            this.db.remove(query, (err, doc) => {
+            this.db.find(query, (err, doc) => {
                 if (err) reject(err);
                 else resolve(doc);
             })
