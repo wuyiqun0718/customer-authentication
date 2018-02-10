@@ -5,6 +5,7 @@
 ```bash
 cd customer-authentication
 npm install
+npm build
 npm start
 ```
 
