@@ -239,6 +239,7 @@ class App extends Component {
           />
           <Divider />
           <TextField
+            errorText={this.state.emailError}
             onChange={this.handleTextFieldChange.bind(null, "email")}
             value={this.state.email}
             hintText="Email address"
@@ -248,6 +249,7 @@ class App extends Component {
           />
           <Divider />
           <TextField
+            errorText={this.state.passwordError}
             onChange={this.handleTextFieldChange.bind(null, "password")}
             value={this.state.password}
             hintText="Password"
