@@ -1,13 +1,11 @@
 .App {
-    width: 60%;
-    margin: 30px auto;
+    width: 80%;
+    margin: 50px auto;
     text-align: center;
 }
 
 .addCustomerButton {
-    position: fixed;
-    bottom: 20%;
-    right: 20%;
+    text-align: left;
 }
 
 .inputField {

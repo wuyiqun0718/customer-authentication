@@ -24,10 +24,16 @@ const getHash = (password, salt) => {
 }
 
 module.exports = (customerDB, certificateDB) => {
-    class customers {
+    class Customers {
         static getAll() {
-            return customerDB.search()
-                .then(customers => customers.map(customer => _.omit(customer, ['hash', 'salt'])));
+            return Promise.all([customerDB.search(), certificateDB.search()])
+                .then( ([customers, certificates]) => {
+                    const certificatesByCustomer = _.groupBy(certificates, 'customerId');
+                    return customers.map(customer => {
+                        if (certificatesByCustomer[customer._id]) customer.certificates.push(...certificatesByCustomer[customer._id]);
+                        return _.omit(customer, ['hash', 'salt'])
+                    });
+                })
         }
 
         static add({ name, email, password }) {
@@ -39,7 +45,7 @@ module.exports = (customerDB, certificateDB) => {
                         email,
                         hash,
                         salt,
-                        certificates: 0
+                        certificates: []
                     }
                     return customerDB.add(newCustomer);
                 })
@@ -47,9 +53,10 @@ module.exports = (customerDB, certificateDB) => {
         }
 
         static delete(_id) {
-            return customerDB.delete({ _id });
+            return customerDB.delete({ _id })
+                .then(() => certificateDB.delete({ customerId: _id }, { multi: true }));
         }
     }
 
-    return customers;
+    return Customers;
 }

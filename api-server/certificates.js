@@ -13,16 +13,14 @@ module.exports = (customerDB, certificateDB) => {
                         cert: keys.certificate
                     }
                     certificateDB.add(body)
-                        .then(newDoc => {
-                            customerDB.update({ _id: customerId }, { $inc: {certificates: 1} } )
-                            resolve(newDoc);
-                        });
+                        .then(newDoc => resolve(newDoc))
+                        .catch(err => reject(err));
                 })
             })
         }
 
-        static changeStatus(id, status) {
-            return certificateDB.update({ id }, { status });
+        static changeStatus(_id, status) {
+            return certificateDB.update({ _id }, { $set: { isActive: status } });
         }
 
         static getAll(customerId) {

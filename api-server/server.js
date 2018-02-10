@@ -3,7 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const config = require('./config');
+const path = require('path');
+const config = require('../src/config');
 
 const app = express();
 const customDatastore = require("./customDatastore");
@@ -18,6 +19,7 @@ const outputError = (error, res) => {
     res.sendStatus(500);
 }
 
+app.use(express.static(path.join(__dirname, '../build'))) ;
 app.use(cors());
 
 app.get('/customers', (req, res) => {
@@ -51,7 +53,9 @@ app.post('/certificates', bodyParser.json(), (req, res) => {
 })
 
 app.post('/certificates/:id', bodyParser.json(), (req, res) => {
-
+    certificates.changeStatus(req.params.id, req.body.status)
+        .then(data => res.send({ updated: data }))
+        .catch(error => outputError(error, res))
 })
 
 app.listen(config.port, () => {
