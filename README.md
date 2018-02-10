@@ -17,21 +17,31 @@ The challenge is to build a UI backed by HTTP-based RESTful API for managing Cus
 
 ### A Customer:
 >Has a name
+
 >Has an email address
+
 >Has a password
+
 >May have zero to many Certificates
 
 ### A Certificate:
 >Belongs to one and only one Customer
+
 >Can be either active or inactive
+
 >Has a private key
+
 >Has a certificate body
 
 ### Your solution must support:
 >Creating/Deleting Customers
+
 >Creating Certificates
+
 >Listing all of a Customer’s Active Certificates
+
 >Activating/Deactivating Certificates. 
+
 >Persistence (data must survive computer restarts)
 
 ### Shortcuts
